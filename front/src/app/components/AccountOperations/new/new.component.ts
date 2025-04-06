@@ -31,9 +31,9 @@ export class NewOperationComponent implements OnInit {
     this.newForm = this.fb.nonNullable.group({
       accountNumber: ['', Validators.required],
       type: ['deposit' as OperationType, Validators.required],
-      amount: [0, [Validators.required, Validators.min(1)]],
-      interest: [0],
-      payments: [0],
+      amount: [, [Validators.required, Validators.min(1)]],
+      interest: [],
+      payments: [],
     });
   }
 
