@@ -1,0 +1,58 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  Validators,
+  FormGroup,
+} from '@angular/forms';
+import { AccountOperationsService } from '../../../services/AccountOperations.service';
+import {
+  OperationDraft,
+  OperationType,
+} from '../../../models/AccountOperation/draft.model';
+
+@Component({
+  selector: 'app-new-operation',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: './new.component.html',
+  styleUrls: ['./new.component.css'],
+})
+export class NewOperationComponent implements OnInit {
+  newForm!: FormGroup;
+
+  constructor(
+    private fb: FormBuilder,
+    private operationsService: AccountOperationsService
+  ) {}
+
+  ngOnInit() {
+    this.newForm = this.fb.nonNullable.group({
+      accountNumber: ['', Validators.required],
+      type: ['deposit' as OperationType, Validators.required],
+      amount: [0, [Validators.required, Validators.min(1)]],
+      interest: [0],
+      payments: [0],
+    });
+  }
+
+  operationType() {
+    return this.newForm.controls['type'].value;
+  }
+
+  async addOperation() {
+    if (this.newForm.invalid) return;
+
+    const draft: OperationDraft = this.newForm.getRawValue();
+
+    if (draft.type !== 'loan') {
+      delete draft.interest;
+      delete draft.payments;
+    }
+
+    console.log('📤 Sending draft:', draft);
+    await this.operationsService.create(draft);
+    this.newForm.reset();
+  }
+}

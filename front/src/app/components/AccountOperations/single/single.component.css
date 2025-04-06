@@ -1,0 +1,33 @@
+/* #operation {
+  border: 1px solid black;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+} */
+
+.operation-card {
+  background-color: #ffffff;
+  border: 1px solid #d1d1d1;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+  font-family: "Segoe UI", sans-serif;
+  max-width: 400px;
+  margin-inline: auto;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.label {
+  font-weight: 600;
+  color: #333;
+}
+
+.value {
+  color: #004080; /* כחול בנקאי */
+}
