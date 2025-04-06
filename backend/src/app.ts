@@ -1,33 +1,32 @@
-import cors from 'cors'
-import express, { json } from "express"
-import { connect } from "./db/mongoose"
-import errorLogger from "./middlewares/error/error-logger"
-import errorResponder from "./middlewares/error/error-responder"
-import notFound from "./middlewares/not-found"
-import furnituresRouter from "./routers/furnitures"
+import cors from "cors";
+import express, { json } from "express";
+import { connect } from "./db/mongoose";
+
+// Middlewares
+import errorLogger from "./middlewares/error/error-logger";
+import errorResponder from "./middlewares/error/error-responder";
+import notFound from "./middlewares/not-found";
+
+// Routers
+import accountOperationsRouter from "./routers/accountOperations";
 
 const app = express();
 
 export async function start() {
+  await connect();
 
-    await connect()
+  // Middlewares
+  app.use(cors());
+  app.use(json());
 
-    
-    // middlewares
-    app.use(cors()) // allow any client to use this server
+  app.use("/operations", accountOperationsRouter);
 
-    app.use(json()) // a middleware to extract the post/put/patch data and save it to the request object in case the content type of the request is application/json
+  app.use(notFound);
 
-    app.use('/', furnituresRouter)
+  app.use(errorLogger);
+  app.use(errorResponder);
 
-    // special notFound middleware
-    app.use(notFound)
-
-    // error middleware
-    app.use(errorLogger)
-    app.use(errorResponder)
-
-    // app.listen(port, () => console.log(`${name} started on port ${port}...`))
+  // app.listen(port, () => console.log(`${name} started on port ${port}...`));
 }
 
-export default app
+export default app;
